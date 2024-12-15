@@ -1,8 +1,20 @@
 import { useTodos } from '../store/Todos'
+import { useSearchParams } from 'react-router-dom';
 
 const ViewTodos = () => {
   const {todos, toggleTodoStatus,handleDeleteTodo} = useTodos();
-  const filteredTodoList = todos
+  const [searchParams] = useSearchParams();
+  const todosData = searchParams.get('todos');
+  let filteredTodoList = todos;
+
+  if(todosData === 'active') {
+    filteredTodoList = todos.filter((todo) => !todo.completed);
+  }
+
+  if(todosData === 'completed') {
+    filteredTodoList = todos.filter((todo) => todo.completed);
+  }
+
   return (
     <>  
       <ul>
