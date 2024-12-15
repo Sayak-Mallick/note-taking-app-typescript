@@ -17,7 +17,7 @@ const ViewTodos = () => {
 
   return (
     <>  
-      <ul>
+      <ul className='main-task'>
         {filteredTodoList?.map((todo) => {
           return (
             <li key={todo.id}>

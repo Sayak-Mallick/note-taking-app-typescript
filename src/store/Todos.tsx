@@ -23,7 +23,15 @@ export const TodosContext = createContext<TodoContext | null>(null); // here we 
 
 export const TodosProvider = ({children}: TodosProviderProps) => {
 
-  const [todos, setTodos] = useState<Todo[]>([]); // here we are defining the state using the useState hook. The state will hold the list of todos.
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    try {
+    const newTodos = localStorage.getItem('todos') || "[]";
+      return JSON.parse(newTodos) as Todo[];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      return [];
+    }
+  }); // here we are defining the state using the useState hook. The state will hold the list of todos.
 
   const handleAddTodo = (task: string) => { // here we are defining a function that will be used to add a new todo to the list of todos.
     setTodos((prev) => {
@@ -36,6 +44,7 @@ export const TodosProvider = ({children}: TodosProviderProps) => {
         },
         ...prev
       ]
+      localStorage.setItem('todos', JSON.stringify(newTodos));
       return newTodos
     })
   }
@@ -49,6 +58,7 @@ export const TodosProvider = ({children}: TodosProviderProps) => {
       }
       return todos
     })
+    localStorage.setItem('todos', JSON.stringify(newTodos));
     return newTodos
    }) 
   }
@@ -56,6 +66,7 @@ export const TodosProvider = ({children}: TodosProviderProps) => {
   const handleDeleteTodo = (id:string) => {
     setTodos((prev) => {
       const newTodos = prev.filter((todo) => todo.id !== id);
+      localStorage.setItem('todos', JSON.stringify(newTodos));
       return newTodos;
     })
   }
