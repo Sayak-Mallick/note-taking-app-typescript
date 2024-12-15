@@ -14,6 +14,8 @@ export type Todo = {
 export type TodoContext = {
   todos: Todo[];
   handleAddTodo: (task: string) => void;
+  toggleTodoStatus: (id: string) => void;
+  handleDeleteTodo: (id: string) => void;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -38,8 +40,28 @@ export const TodosProvider = ({children}: TodosProviderProps) => {
     })
   }
 
+  // here we are defining a function that will be used to toggle the status of a todo. If the todo is completed, it will be marked as incomplete and vice versa.
+  const toggleTodoStatus = (id: string) => { 
+   setTodos((prev) => {
+    const newTodos = prev.map((todos) => {
+      if(todos.id === id) {
+        return {...todos,completed: !todos.completed}
+      }
+      return todos
+    })
+    return newTodos
+   }) 
+  }
+
+  const handleDeleteTodo = (id:string) => {
+    setTodos((prev) => {
+      const newTodos = prev.filter((todo) => todo.id !== id);
+      return newTodos;
+    })
+  }
+
   return (
-    <TodosContext.Provider value={{todos, handleAddTodo}}>
+    <TodosContext.Provider value={{todos, handleAddTodo, toggleTodoStatus, handleDeleteTodo}}>
       {children}
     </TodosContext.Provider>
   )
