@@ -1,12 +1,14 @@
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 const Navbar = () => {
+  const [searchParams] = useSearchParams();
+  const todosData = searchParams.get('todos');
   return (
     <>
       <nav>
-        <Link to="/" className=''>Home</Link>
-        <Link to="/?todos=active" className=''>Active</Link>
-        <Link to="/?todos=completed" className=''>Completed</Link>
+        <Link to="/" className={todosData === null ? "active" : ""}>Home</Link>
+        <Link to="/?todos=active" className={todosData === "active" ? "active" : ""}>Active</Link>
+        <Link to="/?todos=completed"  className={todosData === "completed" ? "active" : ""}>Completed</Link>
       </nav>
     </>
   )
